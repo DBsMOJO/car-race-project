@@ -1,20 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CarProject.Logic
+namespace CarProject.Logic;
+public class Track
 {
-    public class Track
-    {
-        private List<Section> _trackList;
-        
-        public Track(List<Section> trackList)
-        {
-            this._trackList = trackList;
-        }
+    #region fields
+    
+    private List<Section> _sections = new();
+    
+    #endregion
 
-        public Section? StartSection { get => _trackList[0]; }
+    public IReadOnlyList<Section> Sections => _sections.AsReadOnly();
+
+    #region constructor
+    
+    
+    #endregion
+
+    #region methods
+    
+    public void AddSection(Section section)
+    {
+        _sections.Add(section);
     }
+    
+    #endregion
 }

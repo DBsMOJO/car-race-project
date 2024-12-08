@@ -1,28 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace CarProject.Logic;
 
-namespace CarProject.Logic
+public class TrackBuilder
 {
-    public class TrackBuilder
+    #region fields
+    
+    private Track _track;
+    
+    #endregion
+
+    #region constructor
+    
+    public TrackBuilder((int speed, int length)[] sectionsData)
     {
-        private (int, int)[] sectionInfos;
-
-        public TrackBuilder((int, int)[] sectionInfos)
+        _track = new();
+    
+        foreach(var (speed, lenght) in sectionsData)
         {
-            this.sectionInfos = sectionInfos;
-        }
-
-        private Track BuildTrack((int, int)[] sectionInfos)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Track Build()
-        {
-            throw new NotImplementedException();
+            _track.AddSection(new Section(speed, lenght));
         }
     }
+    
+    #endregion
+
+    #region methods
+    
+    public Track Build()
+    {
+        return _track;
+    }
+    
+    #endregion
 }

@@ -1,3 +1,127 @@
 #+title: Car Race Project
+#+author: DBsMOJO
+
+Frog from [[https://github.com/Imre7777/car-race-project][Imre7777]]
+
 * Class Diagram
-[[./class-diagram.png][class-diagram]]
+
+Link: [[./class-diagram.png][Class-Diagram, Car Race Project]]
+
+* ~public class TrackBuilder~
+
+#+begin_src csharp :noweb yes :tangle ./CarProject.Logic/TrackBuilder.cs
+namespace CarProject.Logic;
+
+public class TrackBuilder
+{
+    <<track-builder-fields>>
+
+    <<track-builder-constructor>>
+
+    <<track-builder-methods>>
+}
+#+end_src
+
+** Fields
+
+#+name: track-builder-fields
+#+begin_src csharp
+#region fields
+
+private Track _track;
+
+#endregion
+#+end_src
+
+** Constructor
+
+#+name: track-builder-constructor
+#+begin_src csharp
+#region constructor
+
+public TrackBuilder((int speed, int length)[] sectionsData)
+{
+    _track = new();
+
+    foreach(var (speed, lenght) in sectionsData)
+    {
+        _track.AddSection(new Section(speed, lenght));
+    }
+}
+
+#endregion
+#+end_src
+
+** Methods
+
+Die Methode ~Build()~ gibt die Referenz einer Rennstrecke zurück.
+
+#+name: track-builder-methods
+#+begin_src csharp
+#region methods
+
+public Track Build()
+{
+    return _track;
+}
+
+#endregion
+#+end_src
+
+* ~public class Track~
+
+#+begin_src csharp :noweb yes :tangle ./CarProject.Logic/Track.cs
+namespace CarProject.Logic;
+public class Track
+{
+    <<track-fields>>
+
+    <<track-properties>>
+
+    <<track-constructor>>
+
+    <<track-methods>>
+}
+#+end_src
+
+** Fields
+
+#+name: track-fields
+#+begin_src csharp
+#region fields
+
+private List<Section> _sections = new();
+
+#endregion
+#+end_src
+
+** Properties
+
+#+name: track-properties
+#+begin_src csharp
+public IReadOnlyList<Section> Sections => _sections.AsReadOnly();
+#+end_src
+
+** Constructor
+
+#+name: track-constructor
+#+begin_src csharp
+#region constructor
+
+
+#endregion
+#+end_src
+
+** Methods
+
+#+name: track-methods
+#+begin_src csharp
+#region methods
+
+public void AddSection(Section section)
+{
+    _sections.Add(section);
+}
+
+#endregion
+#+end_src
