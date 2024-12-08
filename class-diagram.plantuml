@@ -1,0 +1,70 @@
+@startuml
+class Car {
+    - _gear: int
+    - _speed: int
+    - _dice: IDice
+
+    + Car(): Car
+    + Car(dice: IDice): Car
+
+    + Speed: int { get; }
+    + Gear: int { get; set; }
+
+    + Accelerate(): void
+}
+
+class DefaultDice {
+    - _random: Random
+
+    + Dots: int { get; private set; }
+
+    + Roll(): void
+}
+
+class FakeDice {
+    + Dots: int { get; set; }
+
+    + Roll(): void
+}
+
+interface IDice {
+    + Dots: int { get; }
+
+    + Roll(): void
+}
+
+class Section {
+    + MaxSpeed: int { get; set; }
+    + Length: int { get; set; }
+    + NextSection: Section? { get; private set; }
+    + PreviousSection: Section? { get; private set; }
+
+    + Section(speed: int, length: int): Section
+
+    + AddAfterMe(section: Section): void
+    + AddBeforeMe(section: Section): void
+}
+
+class Track {
+    - _sections: List<Section>
+
+    + Sections: IReadOnlyList<Section> { get; }
+
+    + AddSection(section: Section): void
+}
+
+class TrackBuilder {
+    - _track: Track
+
+    + TrackBuilder(sectionsData: (int, int)[]): TrackBuilder
+
+    + Build(): Track
+}
+
+FakeDice ..|> IDice
+DefaultDice ..|> IDice
+Car ..> IDice : uses
+Track "1" o-- "*" Section
+Track ..> IReadOnlyList : uses
+TrackBuilder ..> Track : builds
+@enduml
