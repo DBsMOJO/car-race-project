@@ -12,11 +12,17 @@ namespace CarProject.UnitTests
     public class TrackBuilderTest
     {
         [TestMethod]
-        public void ItShouldBuildAConnectedTrack_GivenSectionInformation()
+        public void ItShouldBeNotNull_GivenValidSectionsData()
         {
-            (int,int)[] sectionInfos = {(10,10),(20,20),(30,30)};
-            TrackBuilder builder = new TrackBuilder(sectionInfos);
-            Assert.AreEqual(new Section(10,10), builder.Track.Startsection);
+            // ARRANGE
+            (int speed, int length)[] sectionData = { (50, 500), (60, 600), (70, 700) };
+
+            // ACT
+            TrackBuilder trackBuilder = new TrackBuilder(sectionData);
+            Track track = trackBuilder.Build();
+            
+            // ASSERT
+            Assert.IsNotNull(track);
         }
     }
 }

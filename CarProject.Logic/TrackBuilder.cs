@@ -14,5 +14,15 @@ namespace CarProject.Logic
         {
             this.sectionInfos = sectionInfos;
         }
+
+        private Track BuildTrack((int, int)[] sectionInfos)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Track Build()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
