@@ -3,11 +3,15 @@
 
 Frog from [[https://github.com/Imre7777/car-race-project][Imre7777]]
 
-* Class Diagram
+** Class Diagram
+
+Das Klassendiagramm gibt einen Überblick über die Beziehungen zwischen den Hauptklassen des Car Race Projects.
 
 Link: [[./class-diagram.png][Class-Diagram, Car Race Project]]
 
-* ~public class TrackBuilder~
+** ~public class TrackBuilder~
+
+Die Klasse ~TrackBuilder~ ist für die Konstruktion von Rennstrecken zuständig. Sie erstellt Abschnitte basierend auf den übergebenen Daten.
 
 #+begin_src csharp :noweb yes :tangle ./CarProject.Logic/TrackBuilder.cs
 namespace CarProject.Logic;
@@ -22,7 +26,9 @@ public class TrackBuilder
 }
 #+end_src
 
-** Fields
+*** Fields
+
+Dieser Abschnitt definiert die Felder, die in der Klasse ~TrackBuilder~ verwendet werden.
 
 #+name: track-builder-fields
 #+begin_src csharp
@@ -33,7 +39,9 @@ private Track _track;
 #endregion
 #+end_src
 
-** Constructor
+*** Constructor
+
+Der Konstruktor initialisiert ein neues ~Track~-Objekt und füllt es mit Abschnitten, die durch die Eingabedaten definiert sind.
 
 #+name: track-builder-constructor
 #+begin_src csharp
@@ -52,9 +60,9 @@ public TrackBuilder((int speed, int length)[] sectionsData)
 #endregion
 #+end_src
 
-** Methods
+*** Methods
 
-Die Methode ~Build()~ gibt die Referenz einer Rennstrecke zurück.
+Die Methode ~Build~ gibt die erstellte Rennstrecke zurück.
 
 #+name: track-builder-methods
 #+begin_src csharp
@@ -68,7 +76,9 @@ public Track Build()
 #endregion
 #+end_src
 
-* ~public class Track~
+** ~public class Track~
+
+Die Klasse ~Track~ repräsentiert eine Rennstrecke, die aus mehreren Abschnitten besteht.
 
 #+begin_src csharp :noweb yes :tangle ./CarProject.Logic/Track.cs
 namespace CarProject.Logic;
@@ -84,7 +94,9 @@ public class Track
 }
 #+end_src
 
-** Fields
+*** Fields
+
+Dieser Abschnitt definiert die Felder, die in der Klasse ~Track~ verwendet werden.
 
 #+name: track-fields
 #+begin_src csharp
@@ -95,14 +107,19 @@ private List<Section> _sections = new();
 #endregion
 #+end_src
 
-** Properties
+*** Properties
+
+Die Eigenschaft ~Sections~ stellt eine schreibgeschützte Liste der Abschnitte der Rennstrecke bereit.
 
 #+name: track-properties
 #+begin_src csharp
 public IReadOnlyList<Section> Sections => _sections.AsReadOnly();
 #+end_src
 
-** Constructor
+*** Constructor
+
+Der Konstruktor initialisiert die Klasse ~Track~.
+Dieser Abschnitt dient als Platzhalter für zukünftige Initialisierungslogik.
 
 #+name: track-constructor
 #+begin_src csharp
@@ -112,7 +129,9 @@ public IReadOnlyList<Section> Sections => _sections.AsReadOnly();
 #endregion
 #+end_src
 
-** Methods
+*** Methods
+
+Die Methode ~AddSection~ erlaubt es, der Rennstrecke einen neuen Abschnitt hinzuzufügen.
 
 #+name: track-methods
 #+begin_src csharp
