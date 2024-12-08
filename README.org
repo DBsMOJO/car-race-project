@@ -1,0 +1,3 @@
+#+title: Car Race Project
+* Class Diagram
+[[./class-diagram.png][class-diagram]]
