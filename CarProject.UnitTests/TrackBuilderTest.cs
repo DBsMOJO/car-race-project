@@ -54,16 +54,31 @@ namespace CarProject.UnitTests
             {
                 if (i != 0)
                 {
-                    Assert.AreEqual(sectionData[i-1].speed, track[i-1].MaxSpeed);
-                    Assert.AreEqual(sectionData[i-1].length, track[i-1].Length);
+                    Assert.AreEqual(sectionData[i - 1].speed, track[i - 1].MaxSpeed);
+                    Assert.AreEqual(sectionData[i - 1].length, track[i - 1].Length);
                 }
 
                 if (i != track.Lenght - 1)
                 {
-                    Assert.AreEqual(sectionData[i+1].speed, track[i+1].MaxSpeed);
-                    Assert.AreEqual(sectionData[i+1].length, track[i+1].Length);
+                    Assert.AreEqual(sectionData[i + 1].speed, track[i + 1].MaxSpeed);
+                    Assert.AreEqual(sectionData[i + 1].length, track[i + 1].Length);
                 }
             }
+        }
+
+        [TestMethod]
+        public void ItShouldAddAtTheEndANewSection_GivenASection()
+        {
+            // ARRANGE
+            TrackBuilder trackBuilder = new(sectionData);
+            Track track = new Track(trackBuilder.Build());
+            Section newSection = new(80, 800);
+
+            // ACT
+            trackBuilder.Add(newSection);
+
+            // ASSERT
+            Assert.AreSame(track[track.Lenght - 1], newSection);
         }
     }
 }

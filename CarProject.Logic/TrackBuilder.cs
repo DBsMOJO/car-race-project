@@ -1,10 +1,12 @@
+using System.Collections.Specialized;
+
 namespace CarProject.Logic;
 
 public class TrackBuilder
 {
     #region fields
 
-    private Section _startSection = null;
+    private Section _startSection;
 
     #endregion
     #region constructor
@@ -29,6 +31,18 @@ public class TrackBuilder
     public Section Build()
     {
         return _startSection;
+    }
+
+    public void Add(Section newSection)
+    {
+        Section currentSection = _startSection;
+
+        while (currentSection.NextSection != null)
+        {
+            currentSection = currentSection.NextSection;
+        }
+
+        currentSection.AddAfterMe(newSection);
     }
     
     #endregion
