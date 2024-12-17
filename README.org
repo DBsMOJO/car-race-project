@@ -11,14 +11,14 @@ file:class-diagram.png
 
 ** ~public class TrackBuilder~
 
-Die Klasse ~TrackBuilder~ ist für die Konstruktion von Rennstrecken zuständig. Sie erstellt Abschnitte basierend auf den übergebenen Daten.
+Die Klasse ~TrackBuilder~ ist für die Konstruktion von Rennstrecken zuständig. Sie erstellt und verwaltet Abschnitte (~Sections~) basierend auf den Eingabedaten und stellt Methoden zum Hinzufügen und Entfernen von Abschnitten bereit.
 
 #+begin_src csharp :noweb yes :tangle ./CarProject.Logic/TrackBuilder.cs
 namespace CarProject.Logic;
 
 public class TrackBuilder
 {
-    <<track-builder-fields>>
+    <<track-builder-properties>>
 
     <<track-builder-constructor>>
 
@@ -26,22 +26,87 @@ public class TrackBuilder
 }
 #+end_src
 
-*** Fields
+*** Properties
 
-Dieser Abschnitt definiert die Felder, die in der Klasse ~TrackBuilder~ verwendet werden.
+Die Eigenschaften von ~TrackBuilder~ ermöglichen den Zugriff auf die ~StartSection~, die Länge der Strecke sowie den Zugriff auf spezifische Abschnitte durch den Indexer.
 
-#+name: track-builder-fields
+#+name: track-builder-properties
 #+begin_src csharp
-#region fields
+#region properties
 
-private Track _track;
+public Section StartSection { get; private set; }
+
+public int Length
+{
+    get
+    {
+        int result = StartSection != null ? 1 : 0;
+        Section currentSection = StartSection;
+
+        while (currentSection.NextSection != null)
+        {
+            result++;
+            currentSection = currentSection.NextSection;
+        }
+
+        return result;
+    }
+}
+
+public Section this[int index]
+{
+    get
+    {
+        if (index < 0 || index >= this.Length) throw new ArgumentOutOfRangeException();
+
+        Section current = StartSection;
+        int currentIndex = 0;
+
+        while (current != null)
+        {
+            if (currentIndex == index)
+            {
+                return current;
+            }
+
+            current = current.NextSection;
+            currentIndex++;
+        }
+
+        throw new IndexOutOfRangeException();
+    }
+    set
+    {
+        if (index < 0 || value == null) throw new ArgumentOutOfRangeException();
+
+        Section currentSection = this[index];
+
+
+        if (index == 0)
+        {
+            value.NextSection = currentSection;
+            currentSection.PreviousSection = value;
+            StartSection = value;
+        }
+        else
+        {
+            Section previousSection = currentSection.PreviousSection;
+
+            previousSection.NextSection = value;
+            value.PreviousSection = previousSection;
+
+            value.NextSection = currentSection;
+            currentSection.PreviousSection = value;
+        }
+    }
+}
 
 #endregion
 #+end_src
 
 *** Constructor
 
-Der Konstruktor initialisiert ein neues ~Track~-Objekt und füllt es mit Abschnitten, die durch die Eingabedaten definiert sind.
+Der Konstruktor von ~TrackBuilder~ initialisiert eine neue verkettete Liste von Abschnitten, die durch die Eingabedaten definiert sind. Die erste ~Section~ wird als ~StartSection~ gespeichert.
 
 #+name: track-builder-constructor
 #+begin_src csharp
@@ -49,11 +114,14 @@ Der Konstruktor initialisiert ein neues ~Track~-Objekt und füllt es mit Abschni
 
 public TrackBuilder((int speed, int length)[] sectionsData)
 {
-    _track = new();
+    StartSection = new Section(sectionsData[0].speed, sectionsData[0].length);
 
-    foreach(var (speed, lenght) in sectionsData)
+    Section lastSection = StartSection;
+    for (int i = 1; i < sectionsData.Length; ++i)
     {
-        _track.AddSection(new Section(speed, lenght));
+        Section currentSection = new Section(sectionsData[i].speed, sectionsData[i].length);
+        lastSection.AddAfterMe(currentSection);
+        lastSection = currentSection;
     }
 }
 
@@ -62,15 +130,61 @@ public TrackBuilder((int speed, int length)[] sectionsData)
 
 *** Methods
 
-Die Methode ~Build~ gibt die erstellte Rennstrecke zurück.
+Die Methoden in ~TrackBuilder~ erlauben das Erstellen, Hinzufügen und Entfernen von Abschnitten.
 
 #+name: track-builder-methods
 #+begin_src csharp
 #region methods
 
-public Track Build()
+public Section Build()
 {
-    return _track;
+    return StartSection;
+}
+
+public void Add(Section newSection)
+{
+    Section currentSection = StartSection;
+
+    while (currentSection.NextSection != null)
+    {
+        currentSection = currentSection.NextSection;
+    }
+
+    currentSection.AddAfterMe(newSection);
+}
+
+public void RemoveSection(int index)
+{
+    if (index < 0 || index >= this.Length) throw new ArgumentOutOfRangeException();
+
+    Section sectionToRemove = this[index];
+
+    if (index == 0)
+    {
+        StartSection = StartSection.NextSection;
+        if (StartSection != null)
+        {
+            StartSection.PreviousSection = null;
+        }
+    }
+    else
+    {
+        Section previousSection = sectionToRemove.PreviousSection;
+        Section nextSection = sectionToRemove.NextSection;
+
+        if (previousSection != null)
+        {
+            previousSection.NextSection = nextSection;
+        }
+
+        if (nextSection != null)
+        {
+            nextSection.PreviousSection = previousSection;
+        }
+    }
+
+    sectionToRemove.NextSection = null;
+    sectionToRemove.PreviousSection = null;
 }
 
 #endregion
@@ -78,11 +192,11 @@ public Track Build()
 
 ** ~public class Track~
 
-Die Klasse ~Track~ repräsentiert eine Rennstrecke, die aus mehreren Abschnitten besteht.
+Die Klasse ~Track~ repräsentiert eine Rennstrecke, die aus mehreren verketteten Abschnitten besteht. Sie bietet verschiedene Eigenschaften zur Berechnung von Streckeninformationen, wie z.B. die maximale Geschwindigkeit, die Gesamtlänge der Strecke und die Länge der längsten Section.
 
 #+begin_src csharp :noweb yes :tangle ./CarProject.Logic/Track.cs
 namespace CarProject.Logic;
-public class Track
+public class Track : IEnumberable<Section>
 {
     <<track-fields>>
 
@@ -96,54 +210,185 @@ public class Track
 
 *** Fields
 
-Dieser Abschnitt definiert die Felder, die in der Klasse ~Track~ verwendet werden.
+Das private Feld ~_startSection~ speichert die Referenz zur ersten Section der verketteten Liste.
 
 #+name: track-fields
 #+begin_src csharp
 #region fields
 
-private List<Section> _sections = new();
+private Section _startSection;
 
 #endregion
 #+end_src
 
 *** Properties
 
-Die Eigenschaft ~Sections~ stellt eine schreibgeschützte Liste der Abschnitte der Rennstrecke bereit.
+Die Eigenschaften bieten Zugriff auf die ~StartSection~ und ermöglichen die Berechnung von Informationen über die gesamte Strecke.
 
 #+name: track-properties
 #+begin_src csharp
 #region properties
 
-public IReadOnlyList<Section> Sections => _sections.AsReadOnly();
+public Section StartSection
+{
+    get => UpdateStartSection();
+    private set => _startSection = value;
+}
+
+public int Lenght
+{
+    get
+    {
+        int result = StartSection != null ? 1 : 0;
+
+        Section currentSection = StartSection;
+        while (currentSection.NextSection != null)
+        {
+            ++result;
+            currentSection = currentSection.NextSection;
+        }
+
+        return result;
+    }
+}
+
+public Section this[int index]
+{
+    get
+    {
+        if (index < 0 || index >= this.Lenght) throw new ArgumentOutOfRangeException();
+
+        Section current = StartSection;
+        int currentIndex = 0;
+
+        while (current != null)
+        {
+            if (currentIndex == index)
+            {
+                return current;
+            }
+
+            current = current.NextSection;
+            currentIndex++;
+        }
+
+        throw new IndexOutOfRangeException();
+    }
+}
+
+public int MaxSpeedOfTrack
+{
+    get
+    {
+        int result = default;
+        foreach (Section section in this)
+        {
+            if (result < section.MaxSpeed)
+            {
+                result = section.MaxSpeed;
+            }
+        }
+
+        return result;
+    }
+}
+
+public int LongestSection
+{
+    get
+    {
+        int result = 0;
+        foreach (Section section in this)
+        {
+            if (result < section.Length)
+            {
+                result = section.Length;
+            }
+        }
+
+        return result;
+    }
+}
+
+public int TrackLenght
+{
+    get
+    {
+        int result = 0;
+        foreach (Section section in this)
+        {
+            result += section.Length;
+        }
+
+        return result;
+    }
+}
+
+public int MinSpeedOfTrack
+{
+    get
+    {
+        int result = Int32.MaxValue;
+        foreach (Section section in this)
+        {
+            if (section.MaxSpeed < result)
+            {
+                result = section.MaxSpeed;
+            }
+        }
+
+        return result;
+    }
+}
 
 #endregion
 #+end_src
 
 *** Constructor
 
-Der Konstruktor initialisiert die Klasse ~Track~.
-Dieser Abschnitt dient als Platzhalter für zukünftige Initialisierungslogik.
+Der Konstruktor initialisiert die Klasse ~Track~ mit einer ~StartSection~, die als Einstiegspunkt für die verkettete Liste dient.
 
 #+name: track-constructor
 #+begin_src csharp
 #region constructor
 
+public Track(Section startSection) => StartSection = startSection;
 
 #endregion
 #+end_src
 
 *** Methods
 
-Die Methode ~AddSection~ erlaubt es, der Rennstrecke einen neuen Abschnitt hinzuzufügen.
+Die Methoden von ~Track~ bieten die Möglichkeit, durch die verkettete Liste zu iterieren und die ~StartSection~ zu aktualisieren.
 
 #+name: track-methods
 #+begin_src csharp
 #region methods
 
-public void AddSection(Section section)
+public IEnumerator<Section> GetEnumerator()
 {
-    _sections.Add(section);
+    Section current = StartSection;
+    while (current != null)
+    {
+        yield return current;
+        current = current.NextSection;
+    }
+}
+
+IEnumerator IEnumerable.GetEnumerator()
+{
+    return GetEnumerator();
+}
+
+private Section UpdateStartSection()
+{
+    Section result = _startSection;
+    while (result.PreviousSection != null)
+    {
+        result = result.PreviousSection;
+    }
+
+    return result;
 }
 
 #endregion
