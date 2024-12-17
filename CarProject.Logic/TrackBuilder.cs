@@ -112,4 +112,38 @@ public class TrackBuilder
     }
 
     #endregion
+
+    public void RemoveSection(int index)
+    {
+        if (index < 0 || index >= this.Length) throw new ArgumentOutOfRangeException();
+
+        Section sectionToRemove = this[index];
+
+        if (index == 0)
+        {
+            StartSection = StartSection.NextSection;
+            if (StartSection != null)
+            {
+                StartSection.PreviousSection = null;
+            }
+        }
+        else
+        {
+            Section previousSection = sectionToRemove.PreviousSection;
+            Section nextSection = sectionToRemove.NextSection;
+
+            if (previousSection != null)
+            {
+                previousSection.NextSection = nextSection;
+            }
+
+            if (nextSection != null)
+            {
+                nextSection.PreviousSection = previousSection;
+            }
+        }
+
+        sectionToRemove.NextSection = null;
+        sectionToRemove.PreviousSection = null;
+    }
 }

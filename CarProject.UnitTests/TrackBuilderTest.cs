@@ -12,7 +12,8 @@ namespace CarProject.UnitTests
     public class TrackBuilderTest
     {
         public static (int speed, int length)[] sectionData = { (50, 500), (60, 600), (70, 700) };
-        public Track track = new Track(new TrackBuilder(sectionData).Build());
+        public static TrackBuilder trackBuilder = new(sectionData);
+        public Track track = new Track(trackBuilder.Build());
 
         [TestMethod]
         public void ItShouldReturnNotNullTrack_GivenValidSectionsData()
@@ -114,6 +115,41 @@ namespace CarProject.UnitTests
             Assert.AreSame(newSection, trackBuilder[1].PreviousSection);
             Assert.AreSame(newSection, trackBuilder.StartSection);
             Assert.AreSame(newSection, track.StartSection);
+        }
+
+        [TestMethod]
+        public void ItShouldRemoveSectionAtCorrectIndex_GivenValidIndex()
+        {
+            // ARRANGE
+            TrackBuilder trackBuilder = new(sectionData);
+            Track track = new(trackBuilder.Build());
+            int index = 1;
+
+            // ACT
+            trackBuilder.RemoveSection(index);
+
+            // ASSERT
+            Assert.AreEqual(2, trackBuilder.Length);
+            Assert.AreEqual(70, trackBuilder[1].MaxSpeed);
+            Assert.AreSame(trackBuilder[0].NextSection, trackBuilder[1]);
+            Assert.AreSame(trackBuilder[1].PreviousSection, trackBuilder[0]); 
+        }
+
+        [TestMethod]
+        public void ItShouldUpdateStartSection_GivenTheFirstSectionToRevome()
+        {
+            // ARRANGE
+            TrackBuilder trackBuilder = new(sectionData);
+            Track track = new(trackBuilder.Build());
+            int index = 0;
+
+            // ACT
+            trackBuilder.RemoveSection(index);
+            
+            // ASSERT
+            Assert.AreEqual(2, trackBuilder.Length);
+            Assert.AreEqual(60, trackBuilder[0].MaxSpeed);
+            Assert.IsNull(trackBuilder[0].PreviousSection);
         }
     }
 }
