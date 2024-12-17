@@ -5,7 +5,9 @@
 
 Das Klassendiagramm gibt einen Überblick über die Beziehungen zwischen den Hauptklassen des Car Race Projects.
 
-Link: [[./class-diagram.png][Class-Diagram, Car Race Project]]
+[[file:class-diagram.plantuml][UML Class-Diagram]]:
+
+file:class-diagram.png
 
 ** ~public class TrackBuilder~
 

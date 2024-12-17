@@ -46,19 +46,34 @@ class Section {
 }
 
 class Track {
-    - _sections: List<Section>
+    - _startSection: Section
 
-    + Sections: IReadOnlyList<Section> { get; }
+    + StartSection: Section {get; private set;}
+    + Length: int {get;}
+    + this[index: int]: Section {get;}
+    + MaxSpeedOfTrack: int {get;}
+    + MinSpeedOfTrack: int {get;}
+    + LongestSection: int {get;}
+    + TrackLenght: int {get;}
 
-    + AddSection(section: Section): void
+    + Track(startSection: Section)
+    + GetEnumerator(): IEnumerator<Section>
+    + UpdateStartSection(): Section
+
+    <<interface>> IEnumerable<Section>
 }
 
 class TrackBuilder {
-    - _track: Track
+    - StartSection: Section
 
-    + TrackBuilder(sectionsData: (int, int)[]): TrackBuilder
+    + StartSection: Section {get; private set;}
+    + Length: int {get;}
+    + this[index: int]: Section {get; set;}
 
-    + Build(): Track
+    + TrackBuilder(sectionsData: (int, int)[])
+    + Build(): Section
+    + Add(newSection: Section): void
+    + RemoveSection(index: int): void
 }
 
 FakeDice ..|> IDice
