@@ -1,15 +1,15 @@
 namespace CarProject.Logic;
 public class Track
 {
-    #region fields
+    #region properties
 
-    private Section _startSection = null;
-    
+    public Section StartSection { get; set; }
+
     #endregion
 
     #region constructor
 
-    public Track(Section startSection) => _startSection = startSection;
+    public Track(Section startSection) => StartSection = startSection;
 
     #endregion
 }

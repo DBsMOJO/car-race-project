@@ -11,7 +11,7 @@ public class TrackBuilder
     
     public TrackBuilder((int speed, int length)[] sectionsData)
     {
-        Section _startSection = new Section(sectionsData[0].speed, sectionsData[0].length);
+        _startSection = new Section(sectionsData[0].speed, sectionsData[0].length);
 
         Section lastSection = _startSection;
         for (int i = 1; i < sectionsData.Length; ++i)
