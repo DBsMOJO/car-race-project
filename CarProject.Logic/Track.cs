@@ -94,6 +94,20 @@ public class Track : IEnumerable<Section>
         }
     }
 
+    public int TrackLenght
+    {
+        get
+        {
+            int result = 0;
+            foreach (Section section in this)
+            {
+                result += section.Length;
+            }
+
+            return result;
+        }
+    }
+
     // Min Speed
     // TrackLength
 

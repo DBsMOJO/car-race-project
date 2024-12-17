@@ -99,7 +99,18 @@ namespace CarProject.UnitTests
             
             // ACT & ASSERT
             Assert.AreEqual(longestSectionOfTheTrack, track.LongestSection);
+        }
+
+        [TestMethod]
+        public void ItShouldGiveTheLenghtOfTheTrack_GivenValideTrach()
+        {
+            // ARRANGE
+            (int speed, int length)[] sectionData = { (50, 500), (60, 600), (70, 700) };
+            TrackBuilder trackBuilder = new(sectionData);
+            Track track = new Track(trackBuilder.Build());
             
+            // ACT & ASSERT
+            Assert.AreEqual(500+600+700, track.TrackLenght);
         }
     }
 }
