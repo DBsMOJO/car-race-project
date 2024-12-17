@@ -8,7 +8,7 @@ Das Klassendiagramm gibt einen Überblick über die Beziehungen zwischen den Hau
 
 [[file:class-diagram.plantuml][UML Class-Diagram]]:
 
-file:class-diagram.png
+[[file:class-diagram.png]]
 
 ** ~public class TrackBuilder~
 
