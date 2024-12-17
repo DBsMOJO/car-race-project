@@ -74,5 +74,19 @@ namespace CarProject.UnitTests
             // ACT
             var invalidSection = track[5]; // Ungültiger Index
         }
+
+        [TestMethod]
+        public void ItSouldGiveTheMaxSpeedFromTheTrack_GivenAValideTrack()
+        {
+            // ARRANGE
+            int fastestSpeedOfTheTrack = 100;
+            (int speed, int length)[] sectionData = { (50, 500), (60, 600), (fastestSpeedOfTheTrack, 700) };
+            TrackBuilder trackBuilder = new(sectionData);
+            Track track = new Track(trackBuilder.Build());
+            
+            // ACT & ASSERT
+            Assert.AreEqual(fastestSpeedOfTheTrack, track.MaxSpeedOfTrack);
+        }
+        
     }
 }

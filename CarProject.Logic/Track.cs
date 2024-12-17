@@ -58,6 +58,26 @@ public class Track : IEnumerable<Section>
         }
     }
 
+    public int MaxSpeedOfTrack
+    {
+        get
+        {
+            int result = default;
+            foreach (Section section in this)
+            {
+                if (result < section.MaxSpeed)
+                {
+                    result = section.MaxSpeed;
+                }
+            }
+
+            return result;
+        }
+    }
+    
+    // Min Speed
+    // TrackLength
+
     #endregion
 
     #region constructor
