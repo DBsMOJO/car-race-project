@@ -11,8 +11,8 @@ namespace CarProject.Logic
         #region properties
         public int MaxSpeed { get; set; }
         public int Length { get; set; }
-        public Section? NextSection { get; private set; }
-        public Section? PreviousSection { get; private set; }
+        public Section? NextSection { get; set; }
+        public Section? PreviousSection { get; set; }
         
         #endregion properties
 
