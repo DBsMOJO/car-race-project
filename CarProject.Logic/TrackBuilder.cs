@@ -111,8 +111,6 @@ public class TrackBuilder
         currentSection.AddAfterMe(newSection);
     }
 
-    #endregion
-
     public void RemoveSection(int index)
     {
         if (index < 0 || index >= this.Length) throw new ArgumentOutOfRangeException();
@@ -146,4 +144,5 @@ public class TrackBuilder
         sectionToRemove.NextSection = null;
         sectionToRemove.PreviousSection = null;
     }
+    #endregion
 }
