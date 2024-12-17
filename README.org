@@ -1,8 +1,6 @@
 #+title: Car Race Project
 #+author: DBsMOJO
 
-Frog from [[https://github.com/Imre7777/car-race-project][Imre7777]]
-
 ** Class Diagram
 
 Das Klassendiagramm gibt einen Überblick über die Beziehungen zwischen den Hauptklassen des Car Race Projects.
@@ -113,7 +111,11 @@ Die Eigenschaft ~Sections~ stellt eine schreibgeschützte Liste der Abschnitte d
 
 #+name: track-properties
 #+begin_src csharp
+#region properties
+
 public IReadOnlyList<Section> Sections => _sections.AsReadOnly();
+
+#endregion
 #+end_src
 
 *** Constructor

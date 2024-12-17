@@ -13,6 +13,7 @@ namespace CarProject.Logic
         public int Length { get; set; }
         public Section? NextSection { get; private set; }
         public Section? PreviousSection { get; private set; }
+        
         #endregion properties
 
         #region constructors
