@@ -1,6 +1,7 @@
 #+title: Car Race Project
 #+author: DBsMOJO
 #+date: <2024-12-17 Tue>
+#+TOC: headlines 2
 
 ** Class Diagram
 
