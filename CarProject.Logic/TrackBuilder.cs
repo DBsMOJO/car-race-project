@@ -4,18 +4,84 @@ namespace CarProject.Logic;
 
 public class TrackBuilder
 {
-    #region fields
+    #region properties
 
-    private Section _startSection;
+    public Section StartSection { get; private set; }
+
+    public int Length
+    {
+        get
+        {
+            int result = StartSection != null ? 1 : 0;
+            Section currentSection = StartSection;
+
+            while (currentSection.NextSection != null)
+            {
+                result++;
+                currentSection = currentSection.NextSection;
+            }
+
+            return result;
+        }
+    }
+
+    public Section this[int index]
+    {
+        get
+        {
+            if (index < 0 || index >= this.Length) throw new ArgumentOutOfRangeException();
+
+            Section current = StartSection;
+            int currentIndex = 0;
+
+            while (current != null)
+            {
+                if (currentIndex == index)
+                {
+                    return current;
+                }
+
+                current = current.NextSection;
+                currentIndex++;
+            }
+
+            throw new IndexOutOfRangeException();
+        }
+        set
+        {
+            if (index < 0 || value == null) throw new ArgumentOutOfRangeException();
+
+            Section currentSection = this[index];
+            
+            
+            if (index == 0)
+            {
+                value.NextSection = currentSection;
+                currentSection.PreviousSection = value;
+                StartSection = value;
+            }
+            else
+            {
+                Section previousSection = currentSection.PreviousSection;
+
+                previousSection.NextSection = value;
+                value.PreviousSection = previousSection;
+
+                value.NextSection = currentSection;
+                currentSection.PreviousSection = value;
+            }
+        }
+    }
 
     #endregion
+
     #region constructor
-    
+
     public TrackBuilder((int speed, int length)[] sectionsData)
     {
-        _startSection = new Section(sectionsData[0].speed, sectionsData[0].length);
+        StartSection = new Section(sectionsData[0].speed, sectionsData[0].length);
 
-        Section lastSection = _startSection;
+        Section lastSection = StartSection;
         for (int i = 1; i < sectionsData.Length; ++i)
         {
             Section currentSection = new Section(sectionsData[i].speed, sectionsData[i].length);
@@ -23,19 +89,19 @@ public class TrackBuilder
             lastSection = currentSection;
         }
     }
-    
+
     #endregion
 
     #region methods
-    
+
     public Section Build()
     {
-        return _startSection;
+        return StartSection;
     }
 
     public void Add(Section newSection)
     {
-        Section currentSection = _startSection;
+        Section currentSection = StartSection;
 
         while (currentSection.NextSection != null)
         {
@@ -44,6 +110,6 @@ public class TrackBuilder
 
         currentSection.AddAfterMe(newSection);
     }
-    
+
     #endregion
 }

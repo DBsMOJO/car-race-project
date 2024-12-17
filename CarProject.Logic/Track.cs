@@ -4,9 +4,19 @@ using System.Collections.Specialized;
 namespace CarProject.Logic;
 public class Track : IEnumerable<Section>
 {
+    #region fields
+
+    private Section _startSection;
+
+    #endregion
+           
     #region properties
 
-    public Section StartSection { get; set; }
+    public Section StartSection
+    {
+        get => UpdateStartSection();
+        private set => _startSection = value;
+    }
 
     public int Lenght
     {
@@ -72,6 +82,16 @@ public class Track : IEnumerable<Section>
     {
         return GetEnumerator();
     }
-    
+
+    private Section UpdateStartSection()
+    {
+        Section result = _startSection;
+        while (result.PreviousSection != null)
+        {
+            result = result.PreviousSection;
+        }
+
+        return result;
+    }
     #endregion
 }

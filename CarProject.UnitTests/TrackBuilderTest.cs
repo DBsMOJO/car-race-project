@@ -80,5 +80,40 @@ namespace CarProject.UnitTests
             // ASSERT
             Assert.AreSame(track[track.Lenght - 1], newSection);
         }
+
+        [TestMethod]
+        public void ItShouldInsertSectionAtCorrectIndex_GivenValidIndex()
+        {
+            // ARRANGE
+            TrackBuilder trackBuilder = new(sectionData);
+            Track track = new(trackBuilder.Build());
+            Section newSection = new(80, 800);
+            int index = 1;
+
+            // ACT
+            trackBuilder[index] = newSection;
+
+            // ASSERT
+            Assert.AreSame(trackBuilder[index - 1], newSection.PreviousSection);
+            Assert.AreSame(trackBuilder[index + 1], newSection.NextSection);
+        }
+
+        [TestMethod]
+        public void ItShouldUpdateStartSection_GivenANewSectionAtIndex0()
+        {
+            // ARRANGE
+            TrackBuilder trackBuilder = new(sectionData);
+            Track track = new(trackBuilder.Build());
+            Section newSection = new Section(80, 800);
+
+            // ACT
+            trackBuilder[0] = newSection;
+
+            // ASSERT
+            Assert.AreSame(newSection, trackBuilder[0]);
+            Assert.AreSame(newSection, trackBuilder[1].PreviousSection);
+            Assert.AreSame(newSection, trackBuilder.StartSection);
+            Assert.AreSame(newSection, track.StartSection);
+        }
     }
 }
