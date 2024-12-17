@@ -8,6 +8,46 @@ public class Track : IEnumerable<Section>
 
     public Section StartSection { get; set; }
 
+    public int Lenght
+    {
+        get
+        {
+            int result = StartSection != null ? 1 : 0;
+
+            Section currentSection = StartSection;
+            while (currentSection.NextSection != null)
+            {
+                ++result;
+                currentSection = currentSection.NextSection;
+            }
+
+            return result;
+        }
+    }
+    public Section this[int index]
+    {
+        get
+        {
+            if (index < 0) throw new ArgumentOutOfRangeException();
+
+            Section current = StartSection;
+            int currentIndex = 0;
+
+            while (current != null)
+            {
+                if (currentIndex == index)
+                {
+                    return current;
+                }
+
+                current = current.NextSection;
+                currentIndex++;
+            }
+
+            throw new IndexOutOfRangeException();
+        }
+    }
+
     #endregion
 
     #region constructor
@@ -32,6 +72,6 @@ public class Track : IEnumerable<Section>
     {
         return GetEnumerator();
     }
-
+    
     #endregion
 }

@@ -45,5 +45,25 @@ namespace CarProject.UnitTests
                 ++idx;
             }
         }
+
+        [TestMethod]
+        public void ItShouldLinkPreviousAndNextSectionsCorrectly_GivenValidSectionsData()
+        {
+            // ASSERT
+            for (int i = 0; i < track.Lenght; ++i)
+            {
+                if (i != 0)
+                {
+                    Assert.AreEqual(sectionData[i-1].speed, track[i-1].MaxSpeed);
+                    Assert.AreEqual(sectionData[i-1].length, track[i-1].Length);
+                }
+
+                if (i != track.Lenght - 1)
+                {
+                    Assert.AreEqual(sectionData[i+1].speed, track[i+1].MaxSpeed);
+                    Assert.AreEqual(sectionData[i+1].length, track[i+1].Length);
+                }
+            }
+        }
     }
 }
