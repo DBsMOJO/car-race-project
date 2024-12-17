@@ -83,7 +83,7 @@ namespace CarProject.UnitTests
             (int speed, int length)[] sectionData = { (50, 500), (60, 600), (fastestSpeedOfTheTrack, 700) };
             TrackBuilder trackBuilder = new(sectionData);
             Track track = new Track(trackBuilder.Build());
-            
+
             // ACT & ASSERT
             Assert.AreEqual(fastestSpeedOfTheTrack, track.MaxSpeedOfTrack);
         }
@@ -96,7 +96,7 @@ namespace CarProject.UnitTests
             (int speed, int length)[] sectionData = { (50, 500), (60, 600), (70, longestSectionOfTheTrack) };
             TrackBuilder trackBuilder = new(sectionData);
             Track track = new Track(trackBuilder.Build());
-            
+
             // ACT & ASSERT
             Assert.AreEqual(longestSectionOfTheTrack, track.LongestSection);
         }
@@ -108,9 +108,22 @@ namespace CarProject.UnitTests
             (int speed, int length)[] sectionData = { (50, 500), (60, 600), (70, 700) };
             TrackBuilder trackBuilder = new(sectionData);
             Track track = new Track(trackBuilder.Build());
-            
+
             // ACT & ASSERT
-            Assert.AreEqual(500+600+700, track.TrackLenght);
+            Assert.AreEqual(500 + 600 + 700, track.TrackLenght);
+        }
+
+        [TestMethod]
+        public void ItShouldGiveTheMinMaxOfTheTrack_GivenAValideTrack()
+        {
+            // ARRANGE
+            int slowestSection = 30;
+            (int speed, int length)[] sectionData = { (slowestSection, 500), (60, 600), (70, 700) };
+            TrackBuilder trackBuilder = new(sectionData);
+            Track track = new Track(trackBuilder.Build());
+
+            // ACT & ASSERT
+            Assert.AreEqual(slowestSection, track.MinSpeedOfTrack);
         }
     }
 }
