@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Specialized;
 
 namespace CarProject.Logic;
+
 public class Track : IEnumerable<Section>
 {
     #region fields
@@ -9,7 +10,7 @@ public class Track : IEnumerable<Section>
     private Section _startSection;
 
     #endregion
-           
+
     #region properties
 
     public Section StartSection
@@ -34,6 +35,7 @@ public class Track : IEnumerable<Section>
             return result;
         }
     }
+
     public Section this[int index]
     {
         get
@@ -74,7 +76,24 @@ public class Track : IEnumerable<Section>
             return result;
         }
     }
-    
+
+    public int LongestSection
+    {
+        get
+        {
+            int result = 0;
+            foreach (Section section in this)
+            {
+                if (result < section.Length)
+                {
+                    result = section.Length;
+                }
+            }
+
+            return result;
+        }
+    }
+
     // Min Speed
     // TrackLength
 
@@ -113,5 +132,6 @@ public class Track : IEnumerable<Section>
 
         return result;
     }
+
     #endregion
 }
