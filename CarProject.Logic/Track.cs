@@ -28,7 +28,7 @@ public class Track : IEnumerable<Section>
     {
         get
         {
-            if (index < 0) throw new ArgumentOutOfRangeException();
+            if (index < 0 || index >= this.Lenght) throw new ArgumentOutOfRangeException();
 
             Section current = StartSection;
             int currentIndex = 0;
